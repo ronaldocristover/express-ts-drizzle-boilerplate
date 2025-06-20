@@ -1,4 +1,5 @@
 import { createLogger, format, transports } from "winston";
+import LokiTransport from "winston-loki";
 
 const { combine, timestamp, printf, colorize } = format;
 
@@ -15,6 +16,13 @@ export const logger = createLogger({
   ),
   transports: [
     new transports.Console(),
-    // new transports.File({ filename: 'logs/app.log' }) // Optional file logger
+    new LokiTransport({
+      host: process.env.LOKI_URL || "http://localhost:3100",
+      labels: { app: "express-drizzle" },
+      json: true,
+      replaceTimestamp: true,
+      onConnectionError: (err) =>
+        console.error("❌ Loki connection error:", err),
+    }),
   ],
 });
