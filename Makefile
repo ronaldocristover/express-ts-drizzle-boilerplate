@@ -14,5 +14,5 @@ compose-prod:
 	docker-compose -f docker-compose.prod.yml up -d
 
 clean:
-	docker-compose down -v
+	docker-compose down -vpl
 	docker rmi $(IMAGE_NAME):$(TAG) || true
