@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: express_drizzle_mysql_dev
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: drizzle
+      MYSQL_USER: drizzle_user
+      MYSQL_PASSWORD: drizzle_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data:/var/lib/mysql
+
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: express_drizzle_app_dev
+    depends_on:
+      - db
+    environment:
+      DATABASE_URL: mysql://drizzle_user:drizzle_pass@db:3306/drizzle
+    ports:
+      - "3000:3000"
+    command: >
+      sh -c "npx drizzle-kit push && npm run dev"
+    volumes:
+      - .:/app
+      - /app/node_modules
+
+volumes:
+  db_data:

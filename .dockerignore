@@ -1,0 +1,10 @@
+node_modules
+dist
+drizzle/migrations
+.env
+*.log
+.git
+.gitignore
+docker-compose.override.yml
+Dockerfile.dev
+*.tsbuildinfo

@@ -1,0 +1,31 @@
+version: "3.9"
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: express_drizzle_mysql_prod
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: drizzle
+      MYSQL_USER: drizzle_user
+      MYSQL_PASSWORD: drizzle_pass
+    ports:
+      - "3306:3306"
+    volumes:
+      - db_data_prod:/var/lib/mysql
+
+  app:
+    image: your-dockerhub-username/express-drizzle-app:latest
+    container_name: express_drizzle_app_prod
+    depends_on:
+      - db
+    ports:
+      - "3000:3000"
+    environment:
+      DATABASE_URL: mysql://drizzle_user:drizzle_pass@db:3306/drizzle
+    command: >
+      sh -c "node dist/server.js"
+
+volumes:
+  db_data_prod:

@@ -1,0 +1,9 @@
+node_modules
+dist
+.env
+*.log
+drizzle/migrations/*.sql
+drizzle/migrations/*.lock
+drizzle/migrations/.temp
+drizzle-kit.log
+*.tsbuildinfo
